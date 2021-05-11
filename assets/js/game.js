@@ -17,7 +17,7 @@ var fightOrSkip = function() {
     return fightOrSkip();
   }
 
-  promptFight = promptFight.toLocaleLowerCase();
+  promptFight = promptFight.toLowerCase();
 
   // validate prompt answer
   if (promptFight === "skip") {
@@ -36,58 +36,80 @@ var fightOrSkip = function() {
 
 // create fight function
 var fight = function(enemy) {
-    // alert players that they are starting the round
-  while(playerInfo.health > 0 && enemy.health > 0) { 
-    fightOrSkip(); 
-    var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-    }
-    
+
+  var isPlayerTurn = true;
   
-      
-    var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-      // remove enemy health by subtracting player attack
+  // randomly change turn order
+  if (Math.random() > 0.5) {
+    isPlayerTurn = false;
+  }
+
+  while(playerInfo.health > 0 && enemy.health > 0) { 
+    if (isPlayerTurn) {
+      //ask player if they'd like to fight
+      if (fightOrSkip()) {
+        // if true, leave fight by breaking loop
+        break;
+      }
+
+      var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+
+      // remove enemy's health
       enemy.health = Math.max(0, enemy.health - damage);
       console.log(
-        playerInfo.name + " attacked " + enemy.name + " . " + enemy.name + " now has " + enemy.health + " health remaining. "
+        playerInfo.name +
+          " attacked " +
+          enemy.name +
+          ". " +
+          enemy.name +
+          " now has " +
+          enemy.health +
+          " health remaining."
       );
 
       // check enemy's health
       if (enemy.health <= 0) {
-        window.alert(enemy.name + " has died! ");
+        window.alert(enemy.name + " has died!");
 
-        // award player money for winning
+        // award player money for win
         playerInfo.money = playerInfo.money + 20;
 
+        // leave while() loop since enemy is dead
         break;
-
       } else {
         window.alert(enemy.name + " still has " + enemy.health + " health left.");
       }
 
-      // remove player's health by subtracting the amount set in the enemyAttack variable
+    } else {
       var damage = randomNumber(enemy.attack - 3, enemy.attack);
 
+      // remove enemy's health by subtracting amount we set in the damage variable
       playerInfo.health = Math.max(0, playerInfo.health - damage);
       console.log(
-        enemy.name + " attacked " + playerInfo.name + " . " + playerInfo.name + " now has " + playerInfo.health + "health remaining. "
+        enemy.name +
+          " attacked " +
+          playerInfo.name +
+          ". " +
+          playerInfo.name +
+          " now has " +
+          playerInfo.health +
+          " health remaining."
       );
-
+    
       // check player's health
       if (playerInfo.health <= 0) {
-        window.alert(playerInfo.name + " has died! ");
+        window.alert(playerInfo.name + " has died!");
+        // leave while() loop if player is dead
         break;
       } else {
-        window.alert(playerInfo.name + " still has " + playerInfo.health + " health left. ");
+        window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
       }
-    
-  
+    } 
+    // switch turn order for next round
+    isPlayerTurn = !isPlayerTurn;
+  }
 };
 
-//for (var i = 0; i < enemyNames.length; i++) {
-  //debugger;
-  // call fight function with enemy-robot
-  //fight(enemyNames[i]);
-//}
 // execute fight
 var startGame = function() {
   // reset player stats
