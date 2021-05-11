@@ -34,7 +34,7 @@ var fight = function(enemy) {
       // remove enemy health by subtracting player attack
       enemy.health = Math.max(0, enemy.health - damage);
       console.log(
-        playerInfo.name + " attacked " + enemy.name + " . " + enemy.name + " now has " + enemyHealth + " health remaining. "
+        playerInfo.name + " attacked " + enemy.name + " . " + enemy.name + " now has " + enemy.health + " health remaining. "
       );
 
       // check enemy's health
@@ -50,11 +50,11 @@ var fight = function(enemy) {
       }
 
       // remove player's health by subtracting the amount set in the enemyAttack variable
-      var damage = randomNumber(enemyAttack - 3, enemyAttack);
+      var damage = randomNumber(enemy.attack - 3, enemy.attack);
 
       playerInfo.health = Math.max(0, playerInfo.health - damage);
       console.log(
-        enemy.name + " attacked " + playerInfo.name + " . " + playerInfo.name + " now has " + playerHealth + "health remaining. "
+        enemy.name + " attacked " + playerInfo.name + " . " + playerInfo.name + " now has " + playerInfo.health + "health remaining. "
       );
 
       // check player's health
@@ -116,7 +116,7 @@ var endGame = function() {
 
   // if player is still alive, player wins!
   if (playerInfo.health > 0) {
-    window.alert("Great job, you've survived the game! You now have a score of " + playerMoney + " . ");
+    window.alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + " . ");
   } else { 
     window.alert("You've lost your robot in battle.");
   }
@@ -164,9 +164,20 @@ var shop = function() {
   }
 };
 
+// function to set name
+var getPlayerName = function() {
+  var name = "";
+
+  while (name === "" || name === null) {
+    name = prompt("What is your robot's name?");
+  }
+  console.log("Your robot's name is " + name);
+  return name;
+};
+
 //player info
 var playerInfo = {
-  name: window.prompt("What is your robot's name?"),
+  name: getPlayerName(),
   health: 100,
   attack: 10,
   money: 10,
@@ -212,7 +223,7 @@ var enemyInfo = [
     attack: randomNumber(10, 14)
   }
 ];
-
+-
 
 // start the game when the page loads
 startGame();
